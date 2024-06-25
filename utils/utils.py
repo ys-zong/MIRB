@@ -75,9 +75,9 @@ def encode_image(image_path):
     return base64_image, mime_type
 
 def get_task_instruction(args, dataset):
-    if dataset in ['analogy', 'domain', 'plot', 'image_needles', 'plot_text', 'places', 'image_needles_concat']:
+    if dataset in ['analogy', 'attribute', 'plot_code', 'visual_chain', 'plot_text', 'sightseeing', 'image_needles_concat']:
         instr = 'Answer with a single word.'
-    elif dataset in ['codeu', 'foods', 'image_jigsaw', 'codeu_text']:
+    elif dataset in ['codeu', 'food', 'image_jigsaw', 'codeu_text']:
         instr = 'Answer with the option symbol.'
     elif dataset in ['arxiv', 'arxiv_text']:
         instr = 'Answer with the paper title.'

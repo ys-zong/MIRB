@@ -12,12 +12,12 @@ word_to_num = {
 
 
 def eval_scores(results, dataset, model=None, tokenizer=None, processor=None):
-    if dataset in ['count', 'codeu', 'foods', 'image_jigsaw', 'arxiv', 'image_needles', 'plot', '3d_scene', 
+    if dataset in ['count', 'codeu', 'food', 'image_jigsaw', 'arxiv', 'visual_chain', 'plot_code', '3d_scene', 
                    '3d_scene_concat', 'count_concat', 'image_needles_concat', 'plot_text', 'arxiv_text', 'codeu_text']:
         score = exact_match(results, dataset)
-    elif dataset in ['analogy', 'domain']:
+    elif dataset in ['analogy', 'attribute']:
         score = exact_yes_no(results)
-    elif dataset in ['places']:
+    elif dataset in ['sightseeing']:
         score = exact_in_match(results)
     return score
 
@@ -82,7 +82,7 @@ def exact_match(results, dataset):
             trunc_index = prediction.find('.')
         if trunc_index > 0:
             prediction = prediction[:trunc_index]
-        if dataset in ['count', 'image_needles', '3d_scene', '3d_scene_concat', 'count_concat', 'image_needles_concat']:
+        if dataset in ['count', 'visual_chain', '3d_scene', '3d_scene_concat', 'count_concat', 'image_needles_concat']:
             # find the number
             match = re.search(r'\d+', prediction)
             if match:
