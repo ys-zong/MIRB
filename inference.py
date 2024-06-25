@@ -18,7 +18,7 @@ def parse_args():
     parser.add_argument('--dataset', default=['count'], choices=['analogy', 'count', 'arxiv', 'domain', 'image_needles', 'plot', 'codeu', 'places', 'foods', 'image_jigsaw', "3d_scene"
                                                                  , '3d_scene_concat', 'image_needles_concat', 'count_concat', 'plot_text', 'arxiv_text', 'codeu_text'], nargs="+")
     parser.add_argument("--engine", "-e", choices=["llava15-7b", "llava16-7b", "llava16-13b", "qwen-vl", "qwen-vl-chat", 'internlm-x2', 
-                                                   'emu2-chat', 'idefics1-9b-instruct', 'idefics2-8b', 'gpt4v', 'vila-7b', 'vila-2.7b',
+                                                   'emu2-chat', 'idefics1-9b-instruct', 'idefics2-8b', 'mantis-idefics2', 'gpt4v', 'vila-7b', 'vila-2.7b',
                                                    "phi3-vision", "gemini-pro"],
                         default=["phi3-vision"], nargs="+")
     

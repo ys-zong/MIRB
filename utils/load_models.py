@@ -113,6 +113,12 @@ def load_i2t_model(engine, args=None):
         model = AutoModelForVision2Seq.from_pretrained("HuggingFaceM4/idefics2-8b", torch_dtype=torch.bfloat16, 
                                                                  device_map="auto", low_cpu_mem_usage=True, attn_implementation="flash_attention_2")
         tokenizer = processor.tokenizer
+    elif engine == 'mantis-idefics2':
+        from transformers import AutoProcessor, AutoModelForVision2Seq
+        processor = AutoProcessor.from_pretrained("TIGER-Lab/Mantis-8B-Idefics2") # do_image_splitting is False by default
+        model = AutoModelForVision2Seq.from_pretrained("TIGER-Lab/Mantis-8B-Idefics2", device_map="auto", 
+                                                       torch_dtype=torch.bfloat16, low_cpu_mem_usage=True, attn_implementation="flash_attention_2")
+        tokenizer = processor.tokenizer
     elif 'gpt4v' in engine or 'gemini' in engine:
         model, tokenizer, processor = None, None, None
     else:
