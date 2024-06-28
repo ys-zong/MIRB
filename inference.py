@@ -16,7 +16,7 @@ def parse_args():
 
     parser.add_argument('--dataDir', default='./MIR', type=str, help='Data directory.')
     parser.add_argument('--dataset', default=['count'], choices=['analogy', 'count', 'arxiv', 'attribute', 'visual_chain', 'plot_code', 'codeu', 'sightseeing', 'food', 'image_jigsaw', "3d_scene"
-                                                                 , '3d_scene_concat', 'image_needles_concat', 'count_concat', 'plot_text', 'arxiv_text', 'codeu_text'], nargs="+")
+                                                                 , '3d_scene_concat', 'visual_chain_concat', 'count_concat', 'plot_text', 'arxiv_text', 'codeu_text'], nargs="+")
     parser.add_argument("--engine", "-e", choices=["llava15-7b", "llava16-7b", "llava16-13b", "qwen-vl", "qwen-vl-chat", 'internlm-x2', 
                                                    'emu2-chat', 'idefics1-9b-instruct', 'idefics2-8b', 'mantis-idefics2', 'gpt4v', 'vila-7b', 'vila-2.7b',
                                                    "phi3-vision", "gemini-pro"],
