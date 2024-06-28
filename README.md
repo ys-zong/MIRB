@@ -50,7 +50,7 @@ python evaluate.py --engine phi3-vision idefics2-8b --dataset codeu analogy
 
 ## Results
 
-| **Models**              | **Reasoning** | **Knowledge** | **Perception** | **Multi-Hop** | **Average** |
+| **Models**              | **Knowledge** | **Reasoning** | **Perception** | **Multi-Hop** | **Average** |
 |-------------------------|---------------|---------------|----------------|---------------|-------------|
 | Random Chance           | 20.80         | 37.62         | 21.42          | 0.00          | 23.02       |
 | **LLaVA-v1.5-7B**       | 48.86         | 27.14         | 37.89          | 0.00          | 28.47       |
