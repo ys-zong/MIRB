@@ -64,6 +64,25 @@ def ICL_I2T_inference(args, engine, dataset, model, tokenizer, query,
                 min_new_tokens=1,
                 )
         predicted_answers = tokenizer.batch_decode(generated_ids[:, :], skip_special_tokens=True)[0]
+    elif 'longva' in engine:
+        from longva.mm_utils import tokenizer_image_token, process_images
+        from longva.constants import IMAGE_TOKEN_INDEX
+        images = []
+        input_text = f"<|im_start|>system\nYou are a helpful assistant.<|im_end|>\n<|im_start|>user\n<image>\n{task_instruction}\n"
+        for query_image in query_images:
+            images.append(query_image)
+        input_text += f"{query_text}\n<|im_end|>\n<|im_start|>assistant\n"
+        input_ids = tokenizer_image_token(input_text, tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt").unsqueeze(0).to(model.device)
+        images_tensor = torch.stack(
+                    [
+                        processor.preprocess(image_file, return_tensors="pt")["pixel_values"][0]
+                        for image_file in images
+                    ]
+                ).to(model.device, dtype=torch.float16)
+        with torch.inference_mode():
+            output_ids = model.generate(input_ids, images=[images_tensor], modalities=["video"],
+                                        max_new_tokens=max_new_tokens, do_sample=False, use_cache=True)
+        predicted_answers = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
     elif "phi3-vision" in engine:
         messages = [{"role": "user", "content": task_instruction}]
         image_count = 0
@@ -409,6 +428,23 @@ def I2T_first_prob(args, engine, dataset, model, tokenizer, query,
         input_ids = tokenizer_image_token(prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).cuda()
         with torch.no_grad():
             output = model(input_ids, images=image_tensor,)
+    elif 'longva' in engine:
+        from longva.mm_utils import tokenizer_image_token, process_images
+        from longva.constants import IMAGE_TOKEN_INDEX
+        images = []
+        input_text = f"<|im_start|>system\nYou are a helpful assistant.<|im_end|>\n<|im_start|>user\n<image>\n{task_instruction}\n"
+        for query_image in query_images:
+            images.append(query_image)
+        input_text += f"{query_text}\n<|im_end|>\n<|im_start|>assistant\n"
+        input_ids = tokenizer_image_token(input_text, tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt").unsqueeze(0).to(model.device)
+        images_tensor = torch.stack(
+                    [
+                        processor.preprocess(image_file, return_tensors="pt")["pixel_values"][0]
+                        for image_file in images
+                    ]
+                ).to(model.device, dtype=torch.float16)
+        with torch.inference_mode():
+            output = model(input_ids, images=[images_tensor], modalities=["video"])
     elif 'internlm-x2' in engine:
         images = []
         meta_instruction ='You are an AI assistant whose name is InternLM-XComposer (浦语·灵笔).\n'

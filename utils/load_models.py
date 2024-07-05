@@ -19,6 +19,10 @@ def load_i2t_model(engine, args=None):
         tokenizer, model, image_processor, context_len = load_llava_model(model_path='liuhaotian/llava-v1.6-vicuna-13b', model_base=None, model_name='llava',
                                                                           device_map="cuda", torch_dtype=torch.bfloat16, attn_implementation="flash_attention_2")
         processor = image_processor
+    elif engine == 'longva-7b':
+        from longva.model.builder import load_pretrained_model
+        tokenizer, model, image_processor, context_len = load_pretrained_model("lmms-lab/LongVA-7B", None, "llava_qwen", device_map="cuda:0") # flash-attn is default
+        processor = image_processor
     elif engine == 'phi3-vision':
         model_id = "microsoft/Phi-3-vision-128k-instruct" 
         model = transformers.AutoModelForCausalLM.from_pretrained(model_id, device_map="cuda", trust_remote_code=True, torch_dtype=torch.bfloat16)

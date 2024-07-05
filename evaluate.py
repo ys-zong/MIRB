@@ -10,11 +10,11 @@ metrics = {
     "codeu": "Acc",
     "count": "Acc",
     "arxiv": "Acc",
-    "domain": "Acc",
-    "image_needles": "Acc",
-    "plot": "Acc",
-    "places": "Acc",
-    "foods": "Acc",
+    "attribute": "Acc",
+    "visual_chain": "Acc",
+    "plot_code": "Acc",
+    "sightseeing": "Acc",
+    "food": "Acc",
     "image_jigsaw": "Acc",
     "3d_scene": "Acc",
     "codeu_text": "Acc",
@@ -22,7 +22,7 @@ metrics = {
     "plot_text": "Acc",
     "arxiv_text": "Acc",
     "3d_scene_concat": "Acc",
-    "image_needles_concat": "Acc",
+    "visual_chain_concat": "Acc",
 }
 
 
@@ -31,7 +31,7 @@ def parse_args():
 
     parser.add_argument('--dataset', default='analogy', choices=['analogy', 'codeu', 'count', 'arxiv', 'attribute', 'visual_chain', 'plot_code', 'sightseeing', 'food', 'image_jigsaw', '3d_scene',
                                                                  'codeu_text', 'count_concat', 'plot_text', 'arxiv_text', '3d_scene_concat', 'image_needles_concat'], nargs="+")
-    parser.add_argument("--engine", "-e", choices=["llava16-7b", "llava16-13b", "llava15-7b", "qwen-vl", "qwen-vl-chat", 'internlm-x2', 
+    parser.add_argument("--engine", "-e", choices=["llava16-7b", "llava16-13b", "llava15-7b", "qwen-vl", "qwen-vl-chat", 'internlm-x2', 'longva-7b', 
                                                    'emu2-chat', 'idefics1-9b-instruct', 'idefics1-80b-instruct', 'idefics2-8b', 'mantis-idefics2', 'gpt4v', 'vila-7b', 'vila-2.7b',
                                                    "phi3-vision"],
                         default=["phi3-vision"], nargs="+")
