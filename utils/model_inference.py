@@ -172,9 +172,10 @@ def ICL_I2T_inference(args, engine, dataset, model, tokenizer, query,
         for query_image_path in query_image_paths:
             images.append(query_image_path)
             input_text += f"Image{image_idx} <ImageHere>; "
+            image_idx += 1
         input_text += f"{query_text}"
-        with torch.autocast(device_type='cuda', dtype=torch.float16):
-            predicted_answers, _ = model.chat(tokenizer, query, images, do_sample=False, use_meta=True)
+        with torch.autocast(device_type='cuda', dtype=torch.bfloat16):
+            predicted_answers, _ = model.chat(tokenizer, input_text, images, do_sample=False, use_meta=True)
 
     elif 'emu2-chat' in engine:
         images = []
@@ -445,7 +446,7 @@ def I2T_first_prob(args, engine, dataset, model, tokenizer, query,
                 ).to(model.device, dtype=torch.float16)
         with torch.inference_mode():
             output = model(input_ids, images=[images_tensor], modalities=["video"])
-    elif 'internlm-x2' in engine:
+    elif engine == 'internlm-x2':
         images = []
         meta_instruction ='You are an AI assistant whose name is InternLM-XComposer (浦语·灵笔).\n'
         '- InternLM-XComposer (浦语·灵笔) is a conversational language model that is developed by Shanghai AI Laboratory (上海人工智能实验室). It is designed to be helpful, honest, and harmless.\n'
@@ -469,6 +470,30 @@ def I2T_first_prob(args, engine, dataset, model, tokenizer, query,
         }
         with torch.no_grad():
             output = model(**inputs)
+    elif engine == 'internlm-x2d5':
+        images = []
+        meta_instruction ='You are an AI assistant whose name is InternLM-XComposer (浦语·灵笔).\n'
+        '- InternLM-XComposer (浦语·灵笔) is a conversational language model that is developed by Shanghai AI Laboratory (上海人工智能实验室). It is designed to be helpful, honest, and harmless.\n'
+        '- InternLM-XComposer (浦语·灵笔) can understand and communicate fluently in the language chosen by the user such as English and 中文.',
+        input_text = f"{task_instruction}\n"
+        image_idx = 1
+        for query_image_path in query_image_paths:
+            images.append(query_image_path)
+            input_text += f"Image{image_idx} <ImageHere>; "
+            image_idx += 1
+        input_text += f"{query_text}"
+        if len(images) == 0:
+            images = None
+            inputs = model.build_inputs(tokenizer, input_text, [], meta_instruction)
+        else:
+            inputs, _ = model.interleav_wrap_chat(input_text, images, history=[], meta_instruction=meta_instruction)
+        inputs = {
+            k: v.to(torch.bfloat16).cuda()
+            for k, v in inputs.items() if torch.is_tensor(v)
+        }
+        with torch.autocast(device_type='cuda', dtype=torch.bfloat16):
+            output = model(**inputs)
+
     elif 'idefics1' in engine:
         prompts = [f"You are a helpful assistant.\n{task_instruction}\n"]
         for query_image in query_images:
