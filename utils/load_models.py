@@ -59,6 +59,11 @@ def load_i2t_model(engine, args=None):
         tokenizer = transformers.AutoTokenizer.from_pretrained('internlm/internlm-xcomposer2-7b', trust_remote_code=True)
         model.tokenizer = tokenizer
         processor = None
+    elif engine == 'internlm-x2d5':
+        model = transformers.AutoModel.from_pretrained("internlm/internlm-xcomposer2d5-7b", trust_remote_code=True, torch_dtype=torch.bfloat16, low_cpu_mem_usage=True, device_map="cuda")
+        tokenizer = transformers.AutoTokenizer.from_pretrained("internlm/internlm-xcomposer2d5-7b", trust_remote_code=True)
+        model.tokenizer = tokenizer
+        processor = None
     elif engine == 'internlm-x2-hd':
         model = transformers.AutoModel.from_pretrained('internlm/internlm-xcomposer2-4khd-7b', trust_remote_code=True, torch_dtype=torch.bfloat16, low_cpu_mem_usage=True, device_map="cuda")
         tokenizer = transformers.AutoTokenizer.from_pretrained('internlm/internlm-xcomposer2-4khd-7b', trust_remote_code=True)

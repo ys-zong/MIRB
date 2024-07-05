@@ -133,7 +133,7 @@ def ICL_I2T_inference(args, engine, dataset, model, tokenizer, query,
                 )
         predicted_answers = tokenizer.batch_decode(generated_ids[:, :], skip_special_tokens=True)[0]
     
-    elif 'internlm-x2' in engine:
+    elif engine == 'internlm-x2':
         images = []
         input_text = f"{task_instruction}\n"
         
@@ -146,6 +146,17 @@ def ICL_I2T_inference(args, engine, dataset, model, tokenizer, query,
         else:
             images = torch.stack(images).to(torch.bfloat16).cuda()
         predicted_answers, history = model.chat(tokenizer, query=input_text, image=images, history=[], do_sample=False, max_new_tokens=max_new_tokens)
+    elif engine == 'internlm-x2d5':
+        images = []
+        input_text = f"{task_instruction}\n"
+        image_idx = 1
+        for query_image_path in query_image_paths:
+            images.append(query_image_path)
+            input_text += f"Image{image_idx} <ImageHere>; "
+        input_text += f"{query_text}"
+        with torch.autocast(device_type='cuda', dtype=torch.float16):
+            predicted_answers, _ = model.chat(tokenizer, query, images, do_sample=False, use_meta=True)
+
     elif 'emu2-chat' in engine:
         images = []
         input_text = f"{task_instruction}\n"

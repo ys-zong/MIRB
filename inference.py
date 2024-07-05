@@ -19,7 +19,7 @@ def parse_args():
                                                                  , '3d_scene_concat', 'image_needles_concat', 'count_concat', 'plot_text', 'arxiv_text', 'codeu_text'], nargs="+")
     parser.add_argument("--engine", "-e", choices=["llava15-7b", "llava16-7b", "llava16-13b", "qwen-vl", "qwen-vl-chat", 'internlm-x2', 
                                                    'emu2-chat', 'idefics1-9b-instruct', 'idefics2-8b', 'mantis-idefics2', 'gpt4v', 'vila-7b', 'vila-2.7b',
-                                                   "phi3-vision", "gemini-pro"],
+                                                   "phi3-vision", "gemini-pro", "internlm-x2d5"],
                         default=["phi3-vision"], nargs="+")
     
     parser.add_argument('--max-new-tokens', default=15, type=int, help='Max new tokens for generation.')
