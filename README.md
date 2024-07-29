@@ -19,6 +19,9 @@
 
 ![](https://github.com/DTennant/MIRB_eval/blob/main/assets/Data_samples.jpg?raw=true)
 
+## Updates
+- [2024/07] We have integrated MIRB into [lmms-eval](https://github.com/EvolvingLMMs-Lab/lmms-eval). You can also evaluate your model on our benchmark from there.
+
 ## Environment
 ```bash
 conda create -n MIRB python==3.10 -y
